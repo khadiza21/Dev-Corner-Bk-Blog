@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
-import UserAuthForm from "./pages/userAuthForm";
+import UserAuthForm from "./pages/UserAuthForm";
+
 
 function App() {
 

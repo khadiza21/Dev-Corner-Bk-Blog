@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const UserAuthForm = ({ type }) => {
     return (
-   
+
         <>
             <Animation keyValue={type}>
                 <section className="h-cover flex items-center justify-center">
@@ -68,7 +68,7 @@ const UserAuthForm = ({ type }) => {
             </Animation>
         </>
     );
-       
+
 };
 
 export default UserAuthForm;
