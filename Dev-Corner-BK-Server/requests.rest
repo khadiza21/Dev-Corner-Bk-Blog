@@ -3,5 +3,6 @@ Content-Type: application/json
 
 { 
     "fullname":" Bibi Khadiza ",
-    "email":"bibikhadiza474@gmail.com"
+    "email":"bk@gmail.com",
+    "password":"@Bk123"
 }
