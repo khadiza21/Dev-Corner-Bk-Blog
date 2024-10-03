@@ -27,6 +27,18 @@ mongoose
     console.error("Error connecting to MongoDB:", error);
   });
 
+
+
+  const formatDataToSend = (user) => {
+    return {
+      profile_img: user.personal_info.profile_img,
+      username:user.personal_info.username,
+      fullname:user.personal_info.fullname,
+    }
+  }
+  
+
+
 const generateUsername = async (email) => {
   let username = email.split("@")[0];
 
@@ -36,10 +48,13 @@ const generateUsername = async (email) => {
   }).then((result) => result);
 
   // If not unique, append a random 5-character string
-  isUsernameNotUnique ? username += nanoid().substring(0,5) : "";
+  isUsernameNotUnique ? (username += nanoid().substring(0, 5)) : "";
 
   return username;
 };
+
+
+
 
 server.get("/", (req, res) => {
   res.send("Server is running");
@@ -80,7 +95,7 @@ server.post("/signUp", (req, res) => {
     user
       .save()
       .then((u) => {
-        return res.status(200).json({ user: u });
+        return res.status(200).json(formatDataToSend(u));
       })
       .catch((err) => {
         if (err.code == 11000) {
