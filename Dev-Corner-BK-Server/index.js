@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import "dotenv/config"; //to use environment variables
 import bcrypt from "bcryptjs";
 
+// user import from Schema
+import User from "./Schema/User.js";
+
 const server = express();
 let PORT = process.env.PORT || 3000;
 
@@ -53,11 +56,28 @@ server.post("/signUp", (req, res) => {
   }
 
   bcrypt.hash(password, 10, (err, hashed_password) => {
-    let username ='as';
+    
+    let username = email.split("@")[0];
+
+    // create user object
+    let user = new User({
+      personal_info: { fullname, email, password: hashed_password, username },
+    });
+    user
+      .save()
+      .then((u) => {
+        return res.status(200).json({ user: u });
+      })
+      .catch((err) => {
+        if (err.code == 11000) {
+          return res.status(500).json({ error: "Email already exists. " });
+        }
+
+        return res.status(500).json({ error: err.message });
+      });
+
     console.log(hashed_password);
   });
-
-  return res.status(200).json({ status: "okay" });
 });
 
 server.listen(PORT, () => {
