@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 
 // user import from Schema
 import User from "./Schema/User.js";
+import { nanoid } from "nanoid";
 
 const server = express();
 let PORT = process.env.PORT || 3000;
@@ -25,6 +26,20 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
+
+const generateUsername = async (email) => {
+  let username = email.split("@")[0];
+
+  // Check if the username already exists
+  let isUsernameNotUnique = await User.exists({
+    "personal_info.username": username,
+  }).then((result) => result);
+
+  // If not unique, append a random 5-character string
+  isUsernameNotUnique ? username += nanoid().substring(0,5) : "";
+
+  return username;
+};
 
 server.get("/", (req, res) => {
   res.send("Server is running");
@@ -55,9 +70,8 @@ server.post("/signUp", (req, res) => {
     });
   }
 
-  bcrypt.hash(password, 10, (err, hashed_password) => {
-    
-    let username = email.split("@")[0];
+  bcrypt.hash(password, 10, async (err, hashed_password) => {
+    let username = await generateUsername(email);
 
     // create user object
     let user = new User({
