@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config"; //to use environment variables
 import bcrypt from "bcryptjs";
+import cors from 'cors';
 
 // user import from Schema
 import User from "./Schema/User.js";
@@ -15,6 +16,7 @@ let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for e
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
 
 server.use(express.json()); //middleware - for parsing application/json
+server.use(cors())
 
 // connected to mongoDB
 mongoose
