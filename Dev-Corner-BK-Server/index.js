@@ -131,8 +131,6 @@ server.post("/signIn", (req, res) => {
           return res.status(200).json(formatDataToSend(user));
         }
       });
-
-     
     })
     .catch((err) => {
       console.log(err.message);
