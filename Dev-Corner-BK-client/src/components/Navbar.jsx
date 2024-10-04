@@ -1,10 +1,19 @@
 import { Link, Outlet } from "react-router-dom";
 import logo from "../images/logo.png"
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../App";
 
 
 const Navbar = () => {
     const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
+
+
+    // Destructure userAuth safely
+    const { userAuth = {} } = useContext(UserContext);
+    const { access_token, profile_img } = userAuth; // Destructure values from userAuth
+
+    console.log("form navbar", access_token)
+
 
     return (
         <>
@@ -19,7 +28,7 @@ const Navbar = () => {
                         type="text"
                         placeholder="Search"
                         className="w-full md:w-auto bg-grey p-4 pl-6 pr-[12%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-14" />
-          
+
 
                     <svg
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
@@ -47,8 +56,32 @@ const Navbar = () => {
                         <p>Write</p>
                     </Link>
 
-                    <Link to="/signIn" className="btn-dark py-2">Sign In</Link>
-                    <Link to="/signUp" className="btn-light py-2 hidden md:block">Sign Up</Link>
+
+
+                    {
+                        access_token ?
+                            <>
+                                <Link to="/dashboard/notification"
+                                    className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/10 flex items-center justify-center"
+                                >
+                                    <i className="fi fi-rr-bell text-2xl block mt-2 "></i>
+                                </Link>
+
+                                <div className="relative">
+                                    <button className="w-12 h-12 rounded-full  relative border border-2 ">
+                                        <img src={profile_img} alt="" className="w-full h-full object-cover rounded-full " />
+                                    </button>
+
+                                </div>
+
+                            </>
+
+                            : <>
+                                <Link to="/signIn" className="btn-dark py-2">Sign In</Link>
+                                <Link to="/signUp" className="btn-light py-2 hidden md:block">Sign Up</Link>
+
+                            </>
+                    }
 
                 </div>
 

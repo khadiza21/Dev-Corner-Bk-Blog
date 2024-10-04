@@ -15,7 +15,7 @@ const UserAuthForm = ({ type }) => {
 
     const authForm = useRef();
 
-    let { userAuth: { access_token } ={}, setUserAuth } = useContext(UserContext);
+    let { userAuth: { access_token } = {}, setUserAuth } = useContext(UserContext);
 
     console.log(access_token);
 
@@ -40,12 +40,12 @@ const UserAuthForm = ({ type }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        let serverRoute = type == "sign-in" ? "/signIn" : "/signUp";
+        let serverRoute = type === "sign-in" ? "/signIn" : "/signUp";
 
-        let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
-        let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
+        // let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
+        // let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
 
-        //  formData object create
+        // //  formData object create
         // let authForm = document.getElementById("authForm");
         let form = new FormData(authForm.current);
         let formData = {};
@@ -54,31 +54,27 @@ const UserAuthForm = ({ type }) => {
             formData[key] = value;
         }
 
-        let { fullname, email, password } = formData;
-
+        // let { fullname, email, password } = formData;
+        console.log(formData)
         // Form validation
 
-        if (type != "sign-in") {
-            if (fullname.length < 3) {
-                return toast.error("Fullname must be at least 3 letters long");
-            }
-        }
+        // if (type != "sign-in") {
+        //     if (fullname.length < 3) {
+        //         return toast.error("Fullname must be at least 3 letters long");
+        //     }
+        // }
 
-
-
-
-
-        if (!email.length) {
-            return toast.error("Enter Email.");
-        }
-        if (!emailRegex.test(email)) {
-            return toast.error("Email is invalid");
-        }
-        if (!passwordRegex.test(password)) {
-            return toast.error(
-                "Password should be 6 to 20  characters long with a numeric, 1 lowercase and 1 uppercase letter."
-            );
-        }
+        // if (!email.length) {
+        //     return toast.error("Enter Email.");
+        // }
+        // if (!emailRegex.test(email)) {
+        //     return toast.error("Email is invalid");
+        // }
+        // if (!passwordRegex.test(password)) {
+        //     return toast.error(
+        //         "Password should be 6 to 20  characters long with a numeric, 1 lowercase and 1 uppercase letter."
+        //     );
+        // }
 
 
         userAuthThroughServer(serverRoute, formData);
@@ -96,7 +92,7 @@ const UserAuthForm = ({ type }) => {
                         <Toaster />
                         <form
                             id="authForm"
-
+                            onSubmit={handleSubmit}
                             action=""
                             className="w-[80%] max-w-[400px]"
                         >
@@ -104,15 +100,13 @@ const UserAuthForm = ({ type }) => {
                                 {type == "sign-in" ? "Welcome Back" : "Join Us Today"}
                             </h1>
 
-                            {type != "sign-in" ? (
+                            {type != "sign-in" && (
                                 <InputBox
                                     name="fullname"
                                     type="text"
                                     placeholder="Full Name"
                                     icon="fi-rr-user"
                                 ></InputBox>
-                            ) : (
-                                ""
                             )}
 
                             <InputBox
@@ -131,7 +125,7 @@ const UserAuthForm = ({ type }) => {
 
                             <button
                                 type="submit"
-                                onClick={handleSubmit}
+                                // onClick={handleSubmit}
                                 className="btn-dark center mt-14"
                             >
                                 {type.replace("-", " ")}{" "}
